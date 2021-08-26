@@ -192,7 +192,7 @@ class LandmarksMaskDataset(AbstractLandmarksDataset):
             mask = disk_level_set(image_shape=(shape,shape), center=(landmark[1]*224,landmark[0]*224), radius=self.disk_radius)
             landmarks_masks.append(mask)
         # print(landmarks.shape, image.shape)
-        landmarks_masks = np.array(landmarks_masks)
+        landmarks_masks = np.array(landmarks_masks).astype(np.float32)
         landmarks_masks = torch.from_numpy(landmarks_masks)
         landmarks = torch.tensor(landmarks) - 0.5
         return image, landmarks, landmarks_masks
