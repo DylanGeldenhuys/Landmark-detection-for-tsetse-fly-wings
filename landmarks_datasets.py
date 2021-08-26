@@ -3,15 +3,19 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
+from numpy.lib.function_base import flip
 import pandas as pd
 from math import *
 import pandas as pd
 import torch
 import torchvision.transforms.functional as TF
+from skimage.segmentation import disk_level_set
+
 
 torch.cuda.empty_cache()
-class LandmarksDataset():
 
+
+class AbstractLandmarksDataset():
     def __init__(self, transform=None,zoom = [1.0 - 0.05, 1.0 + 0.05], rotation = [22], height_shift= [0,0.05], width_shift= [0,0.05], flip_data = True):
 
         df = pd.read_csv('../DATA/annotations_left.txt',index_col=0, header=None)
@@ -83,6 +87,17 @@ class LandmarksDataset():
         return len(self.image_filenames)
 
     def __getitem__(self, index):
+        raise NotImplementedError
+
+
+
+class LandmarksDataset(AbstractLandmarksDataset):
+
+    def __init__(self, transform=None,zoom = [1.0 - 0.05, 1.0 + 0.05], rotation = [22], height_shift= [0,0.05], width_shift= [0,0.05], flip_data = True):
+        super(LandmarksDataset, self).__init__(transform=transform,zoom = zoom, rotation = rotation, height_shift= height_shift, width_shift= width_shift, flip_data = flip_data)
+        
+
+    def __getitem__(self, index):
         params = {'zoom_range': self.zoom, 'rotation_range':self.rotation, 'height_shift_range': self.height_shift, 'width_shift_range': self.width_shift }
         image_ = plt.imread(self.image_filenames[index])
     
@@ -95,7 +110,7 @@ class LandmarksDataset():
         if self.flip_data and "right" in self.image_filenames[index]:
             image = np.flip(image, axis=1)
             image_ = np.flip(image_, axis=1)
-            m,n, c = image.shape
+            _,n, _ = image.shape
             landmarks  = np.array([[n - landmarks[i][0], landmarks[i][1]] for i in range(len(landmarks))])
             landmarks_ = np.array([[n - landmarks_[i][0], landmarks_[i][1]] for i in range(len(landmarks_))])
         
@@ -122,4 +137,63 @@ class LandmarksDataset():
 
         landmarks = torch.tensor(landmarks) - 0.5
         return image, landmarks
+
+
+
+class LandmarksMaskDataset(AbstractLandmarksDataset):
+
+    def __init__(self, transform=None,zoom = [1.0 - 0.05, 1.0 + 0.05], rotation = [22], height_shift= [0,0.05], width_shift= [0,0.05], flip_data = True, disk_radius = 2):
+        super(LandmarksMaskDataset, self).__init__(transform=transform,zoom = zoom, rotation = rotation, height_shift= height_shift, width_shift= width_shift, flip_data = flip_data)
+        self.disk_radius = disk_radius
+
+    def __getitem__(self, index):
+        params = {'zoom_range': self.zoom, 'rotation_range':self.rotation, 'height_shift_range': self.height_shift, 'width_shift_range': self.width_shift }
+        image_ = plt.imread(self.image_filenames[index])
+    
+        landmarks_ = self.landmarks[index]
+        
+        image = plt.imread(self.image_filenames[index])
+        
+        landmarks = self.landmarks[index]
+        
+        # Flip image and landmarks "on the fly"
+        if self.flip_data and "right" in self.image_filenames[index]:
+            image = np.flip(image, axis=1)
+            image_ = np.flip(image_, axis=1)
+            _,n, _ = image.shape
+            landmarks  = np.array([[n - landmarks[i][0], landmarks[i][1]] for i in range(len(landmarks))])
+            landmarks_ = np.array([[n - landmarks_[i][0], landmarks_[i][1]] for i in range(len(landmarks_))])
+        
+        if self.transform and self.TransF_:
+            
+            image, landmarks = self.transform(image_, landmarks_, params)
+            image_shape = image.shape
+            landmarks_bool = landmarks < 0
+            landmarks_outofbounds = landmarks*224 > image_shape[1] 
+            while landmarks_bool.any() or landmarks_outofbounds.any():
+                image, landmarks = self.transform(image_, landmarks_, params)
+                landmarks_bool = landmarks < 0
+                landmarks_outofbounds = landmarks*224 > image_shape[1] 
+        else:
+            img_shape = image.copy().shape
+            image = Image.fromarray(image)
+            image = TF.resize(image, (224,224))
+            landmarks = torch.tensor(landmarks) / torch.tensor([img_shape[1],img_shape[0]])
+            image = TF.to_tensor(image)
+            # the following tranform normalises each channel to have a mean at 0.5 and std of 0.5 / NOTE: NOT sure if this is theoreticlly better, should check this
+            image = TF.normalize(image, [0.5], [0.5])
+
+
+
+        
+        c, shape, n = image.shape
+        landmarks_masks = []
+        for landmark in landmarks:
+            mask = disk_level_set(image_shape=(shape,shape), center=(landmark[1]*224,landmark[0]*224), radius=self.disk_radius)
+            landmarks_masks.append(mask)
+        # print(landmarks.shape, image.shape)
+        landmarks_masks = np.array(landmarks_masks)
+        landmarks_masks = torch.from_numpy(landmarks_masks)
+        landmarks = torch.tensor(landmarks) - 0.5
+        return image, landmarks, landmarks_masks
 
