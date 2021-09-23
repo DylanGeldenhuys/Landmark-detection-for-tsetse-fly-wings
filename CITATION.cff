@@ -1,1 +1,12 @@
 
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Dylan"
+  given-names: "Geldenhuys"
+- family-names: "Shane"
+  given-names: "Josias"
+title: "Landmark detection for tsetse fly wings"
+version: 1.0.0
+date-released: 2021-09-00
+url: "https://github.com/DylanGeldenhuys/Landmark-detection-for-tsetse-fly-wings"
