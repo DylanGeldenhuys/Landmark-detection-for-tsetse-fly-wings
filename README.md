@@ -1,6 +1,34 @@
+# Description
+
+This repository contains code used to processes a dataset of tetse fly wing images and locate 11 landmarks on each image using deep learning models. We provide the training scripts as well as the complete pipeline used to process the images. We also include the resulting data from this process. 
+
+The pipeline is Brocken up into two steps we can a two tier process. 
 # How to
 
+Tier 1. 
+The first tier classfies brocken wing images that are specifically missing landmark _ and _ which is the majority of brocken wings. 
 
+The training scripts for the models we experimented with can be found in the folder "Classification*
+
+Tier 2. 
+The second tier predicts 11 landmarks on the unbrocken wings (complete wings). The training scripts for both the models we experimented with can be found in the folders regressions and segmentation. The final models can be found in the folder called saved_models. 
+
+The complete pipelines for tier 1 and two applied on the ful dataset (Vol 20 and 21) can be found in the folder called two_tier_pipeline. 
+
+To apply these models the data first needs to be downloaded from the data dryad. 
+
+All other files in the route directory are explained below for your convenience. 
+analysis-resnet.ipynb
+analysis-segnet.ipynb
+landmarks_dataset.ipynb
+landmarks_transforms.ipynb
+model_specs.ipynb
+Models.ipynb
+winglength_predictions.ipynb
+
+Most importantly the final landmark dataset can be found in the data/final_clean.csv. This data contains all the landmarks, that have also been inspected after predictions where made to remove any errors. 
+
+All the data for this code may found in the data dyrad repository here .....
 
 
 
