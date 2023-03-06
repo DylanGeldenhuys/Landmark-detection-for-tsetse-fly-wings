@@ -18,7 +18,7 @@ To apply these models the data first needs to be downloaded from the data dryad.
 
 NOTE: within each jupyter notebook there may be file paths that need to be changed to the location of the downloaded data from data dyrad.
 
-All other files in the route directory are explained below for your convenience. 
+All other files/folders in the route directory are explained below for your convenience. 
 analysis-resnet.ipynb - generates pot for errors and procrustes analyses
 analysis-segnet.ipynb - generates pot for errors and procrustes analyses
 landmarks_dataset.ipynb - classes for generating and loading the dataset
@@ -26,6 +26,7 @@ landmarks_transforms.ipynb - trasnformations class applied during training
 model_specs.ipynb - a cript to generate the model specifications
 Models.ipynb - Model classes from Pytorch
 winglength_predictions.ipynb - This script generates a pot of the linear relationship between the predicted winglength and the measured one. 
+Baseline - this directory is for producing plots for a baseline model that uses the mean landmark positions on the training set for inference on the test set. 
 
 Most importantly the final landmark dataset can be found in the data/final_clean.csv. This data contains all the landmarks, that have also been inspected after predictions where made to remove any errors. 
 
