@@ -2,7 +2,7 @@
 
 This repository contains code used to processes a dataset of tsetse fly wing images and locate 11 landmarks on each image using deep learning models. We provide the training scripts as well as the complete pipeline used to process the images. We also include the resulting data from this process. 
 
-The pipeline is Brocken up into two steps we call a two tier process. 
+The pipeline is brocken up into two steps we call a two tier process. 
 # How to
 Tier 1. 
 The first tier classifies brocken wing images that are specifically missing landmark 4 and 6 which is the majority of brocken wings. 
@@ -30,9 +30,9 @@ winglength_predictions.ipynb - This script generates a pot of the linear relatio
 Most importantly the final landmark dataset can be found in the data/final_clean.csv. This data contains all the landmarks, that have also been inspected after predictions where made to remove any errors. 
 
 All the data for this code may found in the data dyrad repository here https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1
-
-# Tsetse fly wing landmark data for morphometrics (Vol 20,21):
 ---
+# Tsetse fly wing landmark data for morphometrics (Vol 20,21):
+
 
 This data is intended to be used for morphometric analysis on tsetse fly wings. For more information please consult the journal article linked to this dataset. 
 
