@@ -1,15 +1,17 @@
 # Description
 
-This repository contains code used to processes a dataset of tsetse fly wing images and locate 11 landmarks on each image using deep learning models. We provide the training scripts as well as the complete pipeline used to process the images. We also include the resulting data from this process. 
+This repository contains code used to processes a dataset of tsetse fly wing images and 11 landmarks on each image using deep learning models. We provide the training scripts as well as the complete pipeline used to process the images. We also include the resulting data from this process. 
+
+The resulting data may be used in further studies for morphometric studies on tsetse flies.
 
 The pipeline is brocken up into two steps we call a two tier process. 
 
-Tier 1. 
+Tier 1: 
 The first tier classifies brocken wing images that are specifically missing landmark 4 and 6 which are the majority of brocken wings. 
 
 The training scripts for the models we experimented with can be found in the folder "Classification"
 
-Tier 2. 
+Tier 2: 
 The second tier predicts 11 landmarks on the unbroken wings (we call complete wings). The training scripts for both the models we experimented with can be found in the folders regression and segmentation. The final models can be found in data Dyrad (https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1)
 
 The complete pipelines for tier 1 and 2 applied on the full dataset (Vol 20 and 21) can be found in the folder called two_tier_pipeline. 
@@ -20,28 +22,27 @@ NOTE: within each jupyter notebook there may be file paths that need to be chang
 
 All other files/folders in the route directory are explained below for your convenience. 
 
-analysis-resnet.ipynb - generates pot for errors and procrustes analyses
-analysis-segnet.ipynb - generates pot for errors and procrustes analyses
+analysis-resnet.ipynb - generates plot for errors and procrustes analyses
+analysis-segnet.ipynb - generates plot for errors and procrustes analyses
 landmarks_dataset.ipynb - classes for generating and loading the dataset
-landmarks_transforms.ipynb - trasnformations class applied during training
-model_specs.ipynb - a cript to generate the model specifications
+landmarks_transforms.ipynb - transformations class applied during training
+model_specs.ipynb - a script to generate the model specifications
 Models.ipynb - Model classes from Pytorch
-winglength_predictions.ipynb - this script generates a pot of the linear relationship between the predicted winglength and the measured one. 
+winglength_predictions.ipynb - this script generates a plot of the linear relationship between the predicted winglength and the measured one. 
 Baseline - this directory is for producing plots for a baseline model that uses the mean landmark positions on the training set for inference on the test set. 
 
-Most importantly the final landmark dataset can be found in the data/final_clean.csv. This data contains all the landmarks, that have also been inspected after predictions where made to remove any errors. 
+Most importantly the final landmark dataset can be found in the data/final_clean.csv. This data contains all the landmarks, that have also been inspected after predictions were made to remove any major errors, e,g flipped pages, missing data.
 
-All the data for this code may found in the data dyrad repository here https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1
+All the data for this code may found in the data Dyrad repository here https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1
 
 # How to
-1. First download all the data from the datadyrad
-2. To repeat the above processes, start by getting the training scripts to run, be sure to change all file locations in the notebooks to the correct location on your machine. 
+1. First download all the data from the data Dyrad
+2. To repeat the above processes, start by getting the training scripts to run, and installing all the necessary requirements for each training script (or have a look at the requirements.txt). Be sure to change all file locations in the notebooks to the correct location on your machine. 
 3. If you want to use the model we trained, you may use them in the notebooks within the two_tier_pipeline on Volume 20 and 21. 
 4. If you only want to work on the final morphometric data you can simply download the morphometric_data.csv from the data dryad to obtain all landmark data associated biological measurements.
 
 ---
 # Data dryad repository: Tsetse fly wing landmark data for morphometrics (Vol 20,21):
-
 
 This data is intended to be used for morphometric analysis on tsetse fly wings. For more information please consult the data dryad. 
 
