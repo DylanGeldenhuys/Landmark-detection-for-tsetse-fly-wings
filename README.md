@@ -97,4 +97,4 @@ The landmark data was derived from the model outputs given in the following repo
 
 Code repository: https://github.com/DylanGeldenhuys/Landmark-detection-for-tsetse-fly-wings
 
-data repository: https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1
+Data repository: https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.qz612jmh1
